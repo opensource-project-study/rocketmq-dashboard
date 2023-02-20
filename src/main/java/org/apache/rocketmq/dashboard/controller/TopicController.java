@@ -68,7 +68,12 @@ public class TopicController {
         return topicService.route(topic);
     }
 
-
+    /**
+     * 在RocketMQ控制台添加一个Topic时，会先选择若干Broker集群（会写入参数TopicConfigInfo#clusterNameList），然后点击添加
+     *
+     * @param topicCreateOrUpdateRequest topicCreateOrUpdateRequest
+     * @return ret
+     */
     @RequestMapping(value = "/createOrUpdate.do", method = { RequestMethod.POST})
     @ResponseBody
     public Object topicCreateOrUpdateRequest(@RequestBody TopicConfigInfo topicCreateOrUpdateRequest) {

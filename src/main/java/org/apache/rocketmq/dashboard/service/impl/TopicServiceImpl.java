@@ -121,8 +121,11 @@ public class TopicServiceImpl extends AbstractCommonService implements TopicServ
         BeanUtils.copyProperties(topicCreateOrUpdateRequest, topicConfig);
         try {
             ClusterInfo clusterInfo = mqAdminExt.examineBrokerClusterInfo();
+            // 从参数中的集群名称列表得到一个brokerName的集
             for (String brokerName : changeToBrokerNameSet(clusterInfo.getClusterAddrTable(),
                 topicCreateOrUpdateRequest.getClusterNameList(), topicCreateOrUpdateRequest.getBrokerNameList())) {
+                // 对每个brokerName（对应一个主从，一个主节点，多个从节点）选取一个节点的地址（IP:PORT）
+                // 选取的逻辑在org.apache.rocketmq.common.protocol.route.BrokerData.selectBrokerAddr，优先选取主节点
                 mqAdminExt.createAndUpdateTopicConfig(clusterInfo.getBrokerAddrTable().get(brokerName).selectBrokerAddr(), topicConfig);
             }
         } catch (Exception err) {
