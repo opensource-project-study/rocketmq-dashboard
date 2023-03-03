@@ -125,7 +125,7 @@ public class TopicServiceImpl extends AbstractCommonService implements TopicServ
             for (String brokerName : changeToBrokerNameSet(clusterInfo.getClusterAddrTable(),
                 topicCreateOrUpdateRequest.getClusterNameList(), topicCreateOrUpdateRequest.getBrokerNameList())) {
                 // 对每个brokerName（对应一个主从，一个主节点，多个从节点）选取一个节点的地址（IP:PORT）
-                // 选取的逻辑在org.apache.rocketmq.common.protocol.route.BrokerData.selectBrokerAddr，优先选取主节点
+                // 选取的逻辑在org.apache.rocketmq.common.protocol.route.BrokerData.selectBrokerAddr，优先选取主节点；若没有主节点，随机选取一个从节点。
                 mqAdminExt.createAndUpdateTopicConfig(clusterInfo.getBrokerAddrTable().get(brokerName).selectBrokerAddr(), topicConfig);
             }
         } catch (Exception err) {
